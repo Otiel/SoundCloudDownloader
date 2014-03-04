@@ -221,6 +221,7 @@ namespace SoundCloudDownloader {
                     textBoxUrls.IsReadOnly = true;
                     textBoxDownloadsLocation.IsReadOnly = true;
                     checkBoxTag.IsEnabled = false;
+                    checkBoxOneTrackAtATime.IsEnabled = false;
                 } else {
                     // We just finished the download (or user has cancelled)
                     buttonStart.IsEnabled = true;
@@ -235,6 +236,7 @@ namespace SoundCloudDownloader {
                     TaskbarItemInfo.ProgressValue = 0;
                     textBoxDownloadsLocation.IsReadOnly = false;
                     checkBoxTag.IsEnabled = true;
+                    checkBoxOneTrackAtATime.IsEnabled = true;
                     labelDownloadSpeed.Content = "";
                 }
             }));
