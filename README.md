@@ -24,7 +24,7 @@ Download
 Screenshot
 ----------
 
-![Screenshot](http://i.imgur.com/AttdE1u.png)
+![Screenshot](http://i.imgur.com/Dy1UZfU.png)
 
 Dependencies
 ------------
