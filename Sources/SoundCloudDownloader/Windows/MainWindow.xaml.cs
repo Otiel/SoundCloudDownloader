@@ -350,14 +350,16 @@ namespace SoundCloudDownloader {
                     return;
                 }
             }).ContinueWith(x => {
-                // Ask the user to select the tracks to download
-                var trackSelector = new TrackSelectorWindow(tracks) { Owner = this };
-                Boolean? validated = trackSelector.ShowDialog();
-                tracks = trackSelector.SelectedTracks;
-                if (!validated.Value) {
-                    Log("Downloads cancelled by user", Brushes.Black);
-                } else if (validated.Value && trackSelector.SelectedTracks.Count == 0) {
-                    Log("No track to download selected", Brushes.Black);
+                if (!this.userCancelled) {
+                    // Ask the user to select the tracks to download
+                    var trackSelector = new TrackSelectorWindow(tracks) { Owner = this };
+                    Boolean? validated = trackSelector.ShowDialog();
+                    tracks = trackSelector.SelectedTracks;
+                    if (!validated.Value) {
+                        Log("Downloads cancelled by user", Brushes.Black);
+                    } else if (validated.Value && trackSelector.SelectedTracks.Count == 0) {
+                        Log("No track to download selected", Brushes.Black);
+                    }
                 }
             }, TaskScheduler.FromCurrentSynchronizationContext()
             ).ContinueWith(x => {
