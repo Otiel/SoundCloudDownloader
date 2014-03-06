@@ -12,10 +12,10 @@ Features
 * Downloads MP3 files from SoundCloud.
 * Adds ID3 tags to tracks: Artist and Title.
 
-Download
---------
+Usage
+-----
 
-1. If you're just looking to use the app right now, download the latest version from the [releases](https://github.com/Otiel/SoundCloudDownloader/releases) page as a zip file.
+1. [Download](https://github.com/Otiel/SoundCloudDownloader/releases/latest) the latest version from the releases page as a zip file.
 2. Make sure the following files are located in the same folder:
     * `SoundCloudDownloader.exe`,
     * `taglib-sharp.dll`.
