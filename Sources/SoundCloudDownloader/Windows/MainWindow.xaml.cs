@@ -26,28 +26,28 @@ namespace SoundCloudDownloader {
         #region Fields
 
         /// <summary>
-        /// The files to download, or being downloaded, or downloaded
-        /// Used to compute the current received bytes and the total bytes to download
+        /// The files to download, or being downloaded, or downloaded.
+        /// Used to compute the current received bytes and the total bytes to download.
         /// </summary>
         private List<File> filesDownload;
 
         /// <summary>
-        /// Used to compute and display the download speed
+        /// Used to compute and display the download speed.
         /// </summary>
         private DateTime lastDownloadSpeedUpdate;
 
         /// <summary>
-        /// Used to compute and display the download speed
+        /// Used to compute and display the download speed.
         /// </summary>
         private long lastTotalReceivedBytes = 0;
 
         /// <summary>
-        /// Used when user clicks on 'Cancel' to abort all current downloads
+        /// Used when user clicks on 'Cancel' to abort all current downloads.
         /// </summary>
         private List<WebClient> pendingDownloads;
 
         /// <summary>
-        /// Used when user clicks on 'Cancel' to manage the cancelation (UI...)
+        /// Used when user clicks on 'Cancel' to manage the cancelation (UI...).
         /// </summary>
         private Boolean userCancelled;
         #endregion Fields
@@ -62,8 +62,7 @@ namespace SoundCloudDownloader {
             // (which is the default value) files at the same time
             ServicePointManager.DefaultConnectionLimit = 50;
             // Default options
-            textBoxDownloadsLocation.Text =
-                Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\SC tracks\";
+            textBoxDownloadsLocation.Text = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\SC tracks\";
             // Hints
             textBoxUrls.Text = Constants.UrlsHint;
             textBoxUrls.Foreground = new SolidColorBrush(Colors.DarkGray);
@@ -98,8 +97,7 @@ namespace SoundCloudDownloader {
 
                         Log("Downloaded track \"" + track.GetFileName() + "\"", Brushes.Green);
                     } else if (!e.Cancelled && e.Error != null) {
-                        Log("Unable to download the track \"" + track.GetFileName() + "\"",
-                            Brushes.Red);
+                        Log("Unable to download the track \"" + track.GetFileName() + "\"", Brushes.Red);
                     } // Else the download has been cancelled (by the user)
 
                     doneEvent.Set();
@@ -121,7 +119,30 @@ namespace SoundCloudDownloader {
             doneEvent.WaitOne();
         }
 
-        private List<Track> GetTracks(List<String> urls) {
+        private List<File> GetFilesToDownload(List<Track> tracks) {
+            var files = new List<File>();
+            foreach (Track track in tracks) {
+                if (this.userCancelled) {
+                    // Abort
+                    return new List<File>();
+                }
+
+                Log("Computing size for track \"" + track.Title + "\"", Brushes.Black);
+
+                long size = 0;
+                try {
+                    size = FileHelper.GetFileSize(track.Mp3Url, "HEAD");
+                } catch {
+                    Log("Failed to retrieve the size of the MP3 file for the track \"" + track.Title +
+                        "\". Progress update may be wrong.", Brushes.OrangeRed);
+                }
+
+                files.Add(new File(track.Mp3Url, 0, size));
+            }
+            return files;
+        }
+
+        private List<Track> GetTracks(List<String> urls, Boolean getOnlyMainTrack) {
             var tracks = new List<Track>();
 
             foreach (String url in urls) {
@@ -145,7 +166,12 @@ namespace SoundCloudDownloader {
 
                 // Get info on tracks
                 try {
-                    tracks.AddRange(SoundCloudHelper.GetTracks(htmlCode));
+                    List<Track> tracksOnPage = SoundCloudHelper.GetTracks(htmlCode);
+                    if (getOnlyMainTrack) {
+                        tracks.Add(tracksOnPage.First());
+                    } else {
+                        tracks.AddRange(tracksOnPage);
+                    }
                 } catch {
                     Log("Could not retrieve tracks on " + url, Brushes.Red);
                     continue;
@@ -154,30 +180,6 @@ namespace SoundCloudDownloader {
 
             return tracks;
         }
-
-        private List<File> GetFilesToDownload(List<Track> tracks) {
-            var files = new List<File>();
-            foreach (Track track in tracks) {
-                if (this.userCancelled) {
-                    // Abort
-                    return new List<File>();
-                }
-
-                Log("Computing size for track \"" + track.Title + "\"", Brushes.Black);
-
-                long size = 0;
-                try {
-                    size = FileHelper.GetFileSize(track.Mp3Url, "HEAD");
-                } catch {
-                    Log("Failed to retrieve the size of the MP3 file for the track \"" +
-                        track.Title + "\". Progress update may be wrong.", Brushes.OrangeRed);
-                }
-
-                files.Add(new File(track.Mp3Url, 0, size));
-            }
-            return files;
-        }
-
         /// <summary>
         /// Displays the specified message in the log.
         /// </summary>
@@ -185,13 +187,11 @@ namespace SoundCloudDownloader {
         private void Log(String message, Brush color) {
             this.Dispatcher.Invoke(new Action(() => {
                 // Time
-                var textRange = new TextRange(richTextBoxLog.Document.ContentEnd,
-                    richTextBoxLog.Document.ContentEnd);
+                var textRange = new TextRange(richTextBoxLog.Document.ContentEnd, richTextBoxLog.Document.ContentEnd);
                 textRange.Text = DateTime.Now.ToString("HH:mm:ss") + " ";
                 textRange.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Gray);
                 // Message
-                textRange = new TextRange(richTextBoxLog.Document.ContentEnd,
-                    richTextBoxLog.Document.ContentEnd);
+                textRange = new TextRange(richTextBoxLog.Document.ContentEnd, richTextBoxLog.Document.ContentEnd);
                 textRange.Text = message;
                 textRange.ApplyPropertyValue(TextElement.ForegroundProperty, color);
                 // Line break
@@ -222,14 +222,14 @@ namespace SoundCloudDownloader {
                     textBoxDownloadsLocation.IsReadOnly = true;
                     checkBoxTag.IsEnabled = false;
                     checkBoxOneTrackAtATime.IsEnabled = false;
+                    checkBoxDownloadOnlyMainTrack.IsEnabled = false;
                 } else {
                     // We just finished the download (or user has cancelled)
                     buttonStart.IsEnabled = true;
                     buttonStop.IsEnabled = false;
                     buttonBrowse.IsEnabled = true;
                     textBoxUrls.IsReadOnly = false;
-                    progressBar.Foreground = new SolidColorBrush(
-                        (Color) ColorConverter.ConvertFromString("#FF01D328")); // Green
+                    progressBar.Foreground = new SolidColorBrush((Color) ColorConverter.ConvertFromString("#FF01D328")); // Green
                     progressBar.IsIndeterminate = false;
                     progressBar.Value = progressBar.Minimum;
                     TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
@@ -238,6 +238,7 @@ namespace SoundCloudDownloader {
                     checkBoxTag.IsEnabled = true;
                     checkBoxOneTrackAtATime.IsEnabled = true;
                     labelDownloadSpeed.Content = "";
+                    checkBoxDownloadOnlyMainTrack.IsEnabled = true;
                 }
             }));
         }
@@ -275,8 +276,7 @@ namespace SoundCloudDownloader {
                     // Update UI
                     this.Dispatcher.Invoke(new Action(() => {
                         // Update download speed
-                        labelDownloadSpeed.Content = ( bytesPerSecond / 1024 ).ToString("0.0") +
-                            " kB/s";
+                        labelDownloadSpeed.Content = ( bytesPerSecond / 1024 ).ToString("0.0") + " kB/s";
                     }));
                 }
 
@@ -285,10 +285,8 @@ namespace SoundCloudDownloader {
                     if (!this.userCancelled) {
                         // Update progress label
                         labelProgress.Content =
-                            ( (Double) totalReceivedBytes / ( 1024 * 1024 ) ).ToString("0.00") +
-                            " MB / " +
-                            ( (Double) bytesToDownload / ( 1024 * 1024 ) ).ToString("0.00") +
-                            " MB";
+                            ( (Double) totalReceivedBytes / ( 1024 * 1024 ) ).ToString("0.00") + " MB / " +
+                            ( (Double) bytesToDownload / ( 1024 * 1024 ) ).ToString("0.00") + " MB";
                         // Update progress bar
                         progressBar.Value = totalReceivedBytes;
                         // Taskbar progress is between 0 and 1
@@ -321,6 +319,7 @@ namespace SoundCloudDownloader {
             // Get options
             Boolean tagTracks = checkBoxTag.IsChecked.Value;
             Boolean oneTrackAtATime = checkBoxOneTrackAtATime.IsChecked.Value;
+            Boolean onlyMainTrack = checkBoxDownloadOnlyMainTrack.IsChecked.Value;
             String downloadsFolder = textBoxDownloadsLocation.Text;
             this.pendingDownloads = new List<WebClient>();
 
@@ -338,7 +337,7 @@ namespace SoundCloudDownloader {
 
             Task.Factory.StartNew(() => {
                 // Get info on albums
-                tracks = GetTracks(urls);
+                tracks = GetTracks(urls, onlyMainTrack);
             }).ContinueWith(x => {
                 // Create directory to place track files
                 String directoryPath = downloadsFolder + "\\";
@@ -387,8 +386,7 @@ namespace SoundCloudDownloader {
                     Task[] tasks = new Task[tracks.Count];
                     for (int i = 0; i < tracks.Count; i++) {
                         Track track = tracks[i]; // Mandatory or else => race condition
-                        tasks[i] = Task.Factory.StartNew(() =>
-                            DownloadAndTagTrack(downloadsFolder, track, tagTracks));
+                        tasks[i] = Task.Factory.StartNew(() => DownloadAndTagTrack(downloadsFolder, track, tagTracks));
                     }
                     // Wait for all tracks to be downloaded
                     Task.WaitAll(tasks);

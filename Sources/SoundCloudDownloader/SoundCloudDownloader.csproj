@@ -116,7 +116,7 @@
     </Compile>
     <Compile Include="Business Objects\File.cs" />
     <Compile Include="Business Objects\Track.cs" />
-    <Compile Include="Helpers\Extensions.cs" />
+    <Compile Include="Miscellaneous\Extensions.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Helpers\SoundCloudHelper.cs" />
     <Compile Include="Miscellaneous\Constants.cs" />
