@@ -422,7 +422,7 @@ namespace SoundCloudDownloader {
             }
         }
 
-        private void labelAbout_MouseDown(object sender, MouseButtonEventArgs e) {
+        private void labelVersion_MouseDown(object sender, MouseButtonEventArgs e) {
             Process.Start(Constants.ProjectWebsite);
         }
 

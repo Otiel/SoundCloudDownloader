@@ -22,7 +22,6 @@
         <ProgressBar Margin="12,217,12,0" Name="progressBar" Height="15" VerticalAlignment="Top" IsTabStop="False" />
         <Button Content="Start download" Height="23" Margin="242,188,300,0" Name="buttonStart" VerticalAlignment="Top" HorizontalAlignment="Center" Click="buttonStart_Click" HorizontalContentAlignment="Center" Width="103" TabIndex="5" />
         <Button Content="Cancel" Height="23" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="419,188,289,0" Name="buttonStop" VerticalAlignment="Top" Visibility="Visible" Click="buttonStop_Click" Width="55" IsEnabled="False" TabIndex="6" />
-        <Label Content="About" Margin="0,0,8,-3" Name="labelAbout" HorizontalAlignment="Right" Width="43" Height="28" VerticalAlignment="Bottom" Foreground="#FF003BFF" Cursor="Hand" MouseDown="labelAbout_MouseDown" ToolTip="Open project website" />
         <Label Height="28" Margin="0,229,10,0" Name="labelProgress" VerticalAlignment="Top" HorizontalAlignment="Right" />
         <TextBox Height="23" Margin="104,129,50,0" Name="textBoxDownloadsLocation" VerticalAlignment="Top" TabIndex="1" />
         <Label Content="Save tracks to" Height="28" HorizontalAlignment="Left" Margin="8,127,0,0" Name="labelDownloadsLocation" VerticalAlignment="Top" />
@@ -30,7 +29,7 @@
         <CheckBox Content="Tag tracks" Height="16" HorizontalAlignment="Left" Margin="12,161,0,0" Name="checkBoxTag" VerticalAlignment="Top" IsChecked="False" ToolTip="If checked, the artist and the title will be saved in the tracks tags." TabIndex="3" />
         <CheckBox Content="Download one track at a time" Height="16" Margin="103,161,0,0" Name="checkBoxOneTrackAtATime" VerticalAlignment="Top" HorizontalAlignment="Left" IsEnabled="True" ToolTip="If checked, only one track at a time will be downloaded.&#x0a;If unchecked, all tracks will be downloaded at the same time (preferred if you have a high bandwidth)." IsChecked="True" TabIndex="4" />
         <Label Height="28" HorizontalAlignment="Left" Margin="9,229,0,0" Name="labelDownloadSpeed" VerticalAlignment="Top" />
-        <Label Content="v x.x.x.x" HorizontalAlignment="Left" Margin="8,0,0,-3" Name="labelVersion" Foreground="Gray" Height="28" VerticalAlignment="Bottom" ToolTip="Go to project website to check for new updates" />
-        <CheckBox Content="Download only main track" Height="16" HorizontalAlignment="Left" Margin="296,161,0,0" Name="checkBoxDownloadOnlyMainTrack" VerticalAlignment="Top" ToolTip="If checked, only the main track of the SoundCloud urls will be retrieved.&#x0a;If unchecked, all tracks appearing on the page (&quot;More tracks&quot; section) will be downloaded." IsChecked="True" />
+        <Label Content="v 0.0.0.0" Margin="0,0,7,-5" Name="labelVersion" Foreground="#FF003BFF" Height="28" VerticalAlignment="Bottom" ToolTip="Go to project website to check for new updates" FlowDirection="RightToLeft" MouseDown="labelVersion_MouseDown" Cursor="Hand" HorizontalAlignment="Right" Width="53" />
+        <CheckBox Content="Download only main track" Height="16" HorizontalAlignment="Left" Margin="296,161,0,0" Name="checkBoxDownloadOnlyMainTrack" VerticalAlignment="Top" ToolTip="If checked, only the main track of the page will be retrieved.&#x0a;If unchecked, all tracks appearing on the page (&quot;More tracks&quot; section) will be retrieved." IsChecked="True" />
     </Grid>
 </Window>
