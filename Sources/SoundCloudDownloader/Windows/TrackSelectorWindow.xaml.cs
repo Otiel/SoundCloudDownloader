@@ -23,6 +23,7 @@ namespace SoundCloudDownloader {
             // Select all tracks by default
             this.tracks.ForEach(track => track.IsSelected = true);
             this.tracks.PropertyChanged += new PropertyChangedEventHandler(tracks_PropertyChanged);
+            checkBoxSelectAll.Content = "Select all tracks (" + this.tracks.Count + " selected)";
         }
 
         private void buttonOk_Click(object sender, RoutedEventArgs e) {
@@ -42,6 +43,8 @@ namespace SoundCloudDownloader {
 
         void tracks_PropertyChanged(object sender, PropertyChangedEventArgs e) {
             int selectedNumber = this.tracks.Where(t => t.IsSelected).Count();
+            checkBoxSelectAll.Content = "Select all tracks (" + selectedNumber + " selected)";
+
             if (selectedNumber >= this.tracks.Count) {
                 // All tracks selected
                 checkBoxSelectAll.IsChecked = true;

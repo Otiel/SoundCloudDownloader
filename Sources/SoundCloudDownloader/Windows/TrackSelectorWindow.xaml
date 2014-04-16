@@ -36,7 +36,7 @@
         <ListBox Margin="12,34,12,37" Name="listBoxTracks" 
                  ItemTemplate="{DynamicResource ListBoxItemTemplate}" BorderThickness="0" 
                  Focusable="False" />
-        <CheckBox Content="Select all tracks" Height="16" HorizontalAlignment="Left" 
+        <CheckBox Content="Select all tracks (x selected)" Height="16" HorizontalAlignment="Left" 
                   Margin="15,15,0,0" Name="checkBoxSelectAll" VerticalAlignment="Top" 
                   IsChecked="True"  IsThreeState="False"
                   Unchecked="checkBoxSelectAll_Unchecked" Checked="checkBoxSelectAll_Checked" 
