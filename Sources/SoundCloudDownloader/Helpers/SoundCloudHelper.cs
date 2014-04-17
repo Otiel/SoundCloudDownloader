@@ -60,7 +60,8 @@ namespace SoundCloudDownloader {
 
             var titles = new List<String>();
             foreach (Match match in regex.Matches(htmlCode)) {
-                titles.Add(match.Groups["title"].Value);
+                String title = ConvertUnicodeStrings(match.Groups["title"].Value);
+                titles.Add(title);
             }
 
             return titles;
@@ -72,10 +73,18 @@ namespace SoundCloudDownloader {
 
             var artists = new List<String>();
             foreach (Match match in regex.Matches(htmlCode)) {
-                artists.Add(match.Groups["artist"].Value);
+                String artist = ConvertUnicodeStrings(match.Groups["artist"].Value);
+                artists.Add(artist);
             }
 
             return artists;
+        }
+
+        private static String ConvertUnicodeStrings(String str) {
+            // Unicode characters appear as "_uXXXX" in SoundClound html source.
+            // For instance, we have "_u00e9" for 'é'
+            // We will replace these "_uXXXX" occurences by the real character
+            return Regex.Replace(str, @"\\u([0-9A-Fa-f]{4})", m => ( (char) Convert.ToInt32(m.Groups[1].Value, 16) ).ToString());
         }
     }
 }
