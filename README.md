@@ -1,6 +1,8 @@
 ![Logo](http://i.imgur.com/DyUxyq6.png) SoundCloud Downloader
 ============================================================
 
+[![Download](http://i.imgur.com/UjPs7Sr.png)](https://github.com/Otiel/SoundCloudDownloader/releases/latest)
+
 Description
 -----------
 
