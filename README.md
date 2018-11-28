@@ -1,3 +1,7 @@
 # ![Logo](https://i.imgur.com/DyUxyq6.png) SoundCloud Downloader
 
-2016-09-06 update: since SoundCloud made huge changes to their website some time ago, this application is not working anymore.
+**This repository is archived and the application is not working anymore.**
+
+This application was only compatible with "Classic SoundCloud":
+
+![classic soundcloud](https://i.imgur.com/94VJEeq.png)
